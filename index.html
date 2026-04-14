@@ -1,0 +1,186 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+<title>Proxy mduyk | Premium Shop</title>
+
+<style>
+body{margin:0;font-family:Arial;background:#020617;color:white;overflow-x:hidden;background-image:radial-gradient(circle at top,#1e293b 0%,#020617 100%);min-height:100vh;user-select:none;}
+#splash-screen{position:fixed;inset:0;background:#000;display:flex;justify-content:center;align-items:center;z-index:10000;}
+.logo-mduyk{font-size:50px;color:#22c55e;letter-spacing:10px;text-shadow:0 0 20px #22c55e;animation:zoom 1.5s ease-out;}
+@keyframes zoom{from{opacity:0;transform:scale(0.5);}to{opacity:1;transform:scale(1);}}
+#authPage{position:fixed;inset:0;background:#0b1220;display:flex;justify-content:center;align-items:center;z-index:9999;}
+.auth-box{background:rgba(17,24,39,0.8);padding:30px;border-radius:20px;width:320px;backdrop-filter:blur(10px);border:1px solid rgba(255,255,255,0.1);box-shadow:0 20px 50px rgba(0,0,0,0.5);}
+.auth-box h3{color:#22c55e;text-align:center;margin-bottom:15px;font-size:16px;}
+.auth-box input{width:100%;padding:12px;margin:8px 0;border:none;border-radius:10px;background:#1f2937;color:white;}
+.auth-box button{width:100%;padding:12px;border:none;border-radius:10px;background:#22c55e;color:#052e16;font-weight:bold;margin-top:5px;}
+.header{padding:15px;background:rgba(15,23,42,0.9);position:sticky;top:0;z-index:100;border-bottom:1px solid #1e293b;display:flex;justify-content:space-between;align-items:center;}
+.logo{color:#22c55e;font-weight:bold;font-size:18px;}
+.menu{display:flex;justify-content:center;gap:10px;padding:15px;background:#020617;}
+.menu button{padding:10px 25px;border:none;border-radius:25px;background:#1e293b;color:white;}
+.menu .active{background:#22c55e;color:#052e16;}
+.container{display:grid;grid-template-columns:repeat(auto-fit,minmax(160px,1fr));gap:15px;padding:15px;}
+.box{background:#1e293b;padding:20px;border-radius:15px;text-align:center;cursor:pointer;border:1px solid rgba(255,255,255,0.05);}
+.price{color:#22c55e;font-weight:800;font-size:20px;margin:10px 0;}
+#pay{display:none;position:fixed;inset:0;background:rgba(0,0,0,0.9);justify-content:center;align-items:center;z-index:11000;}
+.pay-box{background:#1e293b;padding:25px;border-radius:20px;width:320px;border:1px solid #22c55e;}
+.pay-box input{width:100%;padding:12px;border-radius:10px;border:none;background:#0f172a;color:white;margin-top:10px;}
+.history{padding:15px;}
+.item{background:#111827;margin:10px 0;padding:15px;border-radius:12px;font-size:14px;border-left:4px solid #22c55e;}
+</style>
+</head>
+
+<body oncontextmenu="return false;">
+
+<div id="splash-screen">
+<div class="logo-mduyk">MDUYK</div>
+</div>
+
+<div id="authPage" style="display:none">
+<div class="auth-box">
+<h3>ĐĂNG KÝ</h3>
+<input id="regUser" placeholder="Tài khoản">
+<input id="regPass" type="password" placeholder="Mật khẩu">
+<button onclick="register()">ĐĂNG KÝ</button>
+<hr>
+<h3>ĐĂNG NHẬP</h3>
+<input id="logUser" placeholder="Tài khoản">
+<input id="logPass" type="password" placeholder="Mật khẩu">
+<button onclick="login()">VÀO SHOP</button>
+</div>
+</div>
+
+<div id="main" style="display:none">
+<div class="header">
+<div class="logo">Proxy mduyk</div>
+<div style="color:red;cursor:pointer;" onclick="location.reload()">Đăng xuất</div>
+</div>
+
+<div class="menu">
+<button id="btnProxy" class="active" onclick="showTab('proxy')">Proxy</button>
+<button id="btnKc" onclick="showTab('kc')">Nạp KC</button>
+</div>
+
+<div id="proxyTab" class="container">
+<div class="box" onclick="openPay('Proxy Tuần','40k')"><h3>Tuần</h3><div class="price">40K</div></div>
+<div class="box" onclick="openPay('Proxy Tháng','80k')"><h3>Tháng</h3><div class="price">80K</div></div>
+<div class="box" onclick="openPay('Proxy Năm','180k')"><h3>Năm</h3><div class="price">180K</div></div>
+</div>
+
+<div id="kcTab" class="container" style="display:none">
+<div class="box" onclick="openPay('113 KC','19k')">113 KC<div class="price">19K</div></div>
+<div class="box" onclick="openPay('283 KC','48k')">283 KC<div class="price">48K</div></div>
+</div>
+
+<div class="history">
+<div id="historyBox"></div>
+</div>
+</div>
+
+<div id="pay">
+<div class="pay-box">
+<h3>Thanh toán</h3>
+<p id="product"></p>
+<input id="gameID" placeholder="Nhập ID">
+<div>MB BANK<br>0588807300000</div>
+<button onclick="confirmPay()">Xác nhận</button>
+<button onclick="closePay()">Huỷ</button>
+</div>
+</div>
+
+<script>
+window.onload=function(){
+setTimeout(()=>{
+document.getElementById('splash-screen').style.display='none';
+document.getElementById('authPage').style.display='flex';
+},1500);
+}
+
+function register(){
+let u=regUser.value,p=regPass.value;
+if(!u||!p)return alert("Nhập đủ");
+localStorage.setItem("user",u);
+localStorage.setItem("pass",p);
+alert("OK");
+}
+
+function login(){
+let u=logUser.value,p=logPass.value;
+if(u===localStorage.getItem("user")&&p===localStorage.getItem("pass")){
+authPage.style.display="none";
+main.style.display="block";
+loadHistory();
+}else alert("Sai");
+}
+
+function showTab(t){
+proxyTab.style.display=t=="proxy"?"grid":"none";
+kcTab.style.display=t=="kc"?"grid":"none";
+}
+
+let currentProduct="";
+function openPay(n,p){
+currentProduct=n+" "+p;
+product.innerText=currentProduct;
+pay.style.display="flex";
+}
+
+function closePay(){
+pay.style.display="none";
+}
+
+function confirmPay(){
+let id=gameID.value;
+if(!id)return alert("Nhập ID");
+let h=JSON.parse(localStorage.getItem("history")||"[]");
+h.push({p:currentProduct,id:id,t:new Date().toLocaleString()});
+localStorage.setItem("history",JSON.stringify(h));
+loadHistory();
+pay.style.display="none";
+setTimeout(()=>{location.href="https://zalo.me/0328033706"},500);
+}
+
+function loadHistory(){
+let h=JSON.parse(localStorage.getItem("history")||"[]");
+historyBox.innerHTML=h.map(i=>`<div class="item">${i.p}<br>ID:${i.id}<br>${i.t}</div>`).join("");
+}
+
+(function(){
+const isMobile=/Android|iPhone|iPad|iPod/i.test(navigator.userAgent);
+if(isMobile)return;
+
+let triggered=false;
+
+function fake(){
+document.documentElement.innerHTML=`<body style="background:#000;color:#ef4444;display:flex;justify-content:center;align-items:center;height:100vh;font-family:monospace;"><div><h1>SECURITY</h1><p>Blocked</p></div></body>`;
+}
+
+function detect(){
+if(window.outerWidth-window.innerWidth>160||window.outerHeight-window.innerHeight>160){
+triggered=true;fake();
+}
+}
+
+setInterval(()=>{
+if(triggered){
+(function(){}.constructor("debugger")());
+}else detect();
+},300);
+
+document.addEventListener("keydown",e=>{
+if(e.key==="F12"||(e.ctrlKey&&e.shiftKey&&["I","J","C"].includes(e.key))||(e.ctrlKey&&e.key==="u")){
+e.preventDefault();
+triggered=true;fake();
+}
+});
+
+document.addEventListener("contextmenu",e=>{
+e.preventDefault();
+triggered=true;fake();
+});
+})();
+</script>
+
+</body>
+</html>
